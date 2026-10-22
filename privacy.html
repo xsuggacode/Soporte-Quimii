@@ -39,18 +39,20 @@
 <div class="wrap">
 
   <h1>Política de Privacidad de MeteoQuimii</h1>
-  <p class="updated">Última actualización: 21/10/2026</p>
+  <p class="updated">Última actualización: 22/10/2026</p>
 
   <p>MeteoQuimii ("la app", "nosotros") es una aplicación de pronóstico meteorológico y de comunidad desarrollada de forma independiente por el proyecto Quimii. Esta política explica qué datos recolectamos, para qué los usamos y qué opciones tenés.</p>
 
   <h2>1. Datos que recolectamos</h2>
   <div class="card">
     <ul>
+      <li><strong>Cuenta (opcional):</strong> podés usar la app sin cuenta. Si creás una, guardamos tu correo electrónico, nombre de usuario, el estado de tu plan (Premium) y las sesiones de tus dispositivos (máximo 2). La autenticación la gestiona Firebase Authentication.</li>
       <li><strong>Ubicación (GPS):</strong> solo si activás "Usar mi ubicación" o "Usar GPS" en un reporte de Comunidad, y con tu consentimiento explícito previo. Se usa para mostrarte el pronóstico de tu zona y/o ubicar tu reporte en el mapa.</li>
-      <li><strong>Ciudad buscada o guardada:</strong> se guarda localmente en tu dispositivo (localStorage) para que no tengas que buscarla de nuevo.</li>
-      <li><strong>Contenido de Comunidad:</strong> si creás un reporte, guardamos el tipo de fenómeno, intensidad, comentario opcional, foto opcional y ubicación aproximada en nuestra base de datos (Firebase/Firestore). Los reportes son anónimos: no pedimos ni guardamos tu nombre.</li>
+      <li><strong>Ciudad elegida y alertas de lluvia:</strong> la ciudad se guarda en tu dispositivo. Si activás las notificaciones, enviamos a nuestro servidor el token de notificaciones de tu dispositivo y las coordenadas aproximadas de esa ciudad para avisarte de lluvia aunque la app esté cerrada. Se eliminan automáticamente tras 14 días sin uso de la app.</li>
+      <li><strong>Quimii Weather Engine:</strong> el motor combina modelos meteorológicos abiertos (Open-Meteo, licencia CC BY 4.0) y radar de RainViewer. Consultamos esos datos para la ciudad elegida; no los asociamos a tu identidad.</li>
+      <li><strong>Contenido de Comunidad:</strong> si creás un reporte, guardamos el tipo de fenómeno, intensidad, comentario opcional, foto opcional, ubicación aproximada y el identificador de tu cuenta en nuestra base de datos (Firebase/Firestore). Tus votos en reportes también se asocian a tu identificador.</li>
       <li><strong>Fotos:</strong> si adjuntás una foto a un reporte, se sube a Cloudinary para poder mostrarla en el mapa comunitario.</li>
-      <li><strong>Datos de uso y analítica:</strong> usamos Firebase Analytics para entender cómo se usa la app (ej. qué ciudades se buscan más, qué gráficos se miran), de forma agregada y anónima.</li>
+      <li><strong>Datos de uso y analítica:</strong> usamos Firebase Analytics para entender cómo se usa la app (ej. qué ciudades se buscan más, qué gráficos se miran), de forma agregada.</li>
       <li><strong>Identificadores de publicidad y datos para anuncios:</strong> usamos Google AdMob para mostrar anuncios. AdMob puede recolectar identificadores del dispositivo (como el Advertising ID), IP aproximada y datos de interacción con los anuncios.</li>
     </ul>
   </div>
@@ -63,8 +65,10 @@
   <h2>3. Con quién compartimos datos</h2>
   <ul>
     <li><strong>Google AdMob / Google Ads:</strong> para mostrar y medir anuncios.</li>
-    <li><strong>Firebase (Google):</strong> autenticación anónima, base de datos de reportes comunitarios y analítica de uso.</li>
+    <li><strong>Firebase (Google):</strong> autenticación (anónima o con correo), notificaciones push (FCM), base de datos de reportes comunitarios y analítica de uso.</li>
     <li><strong>Cloudinary:</strong> alojamiento de las fotos que subís a un reporte.</li>
+    <li><strong>Cloudflare:</strong> aloja nuestro servidor, que calcula el pronóstico y envía las alertas de lluvia.</li>
+    <li><strong>Open-Meteo y RainViewer:</strong> proveedores de datos meteorológicos y de radar (reciben coordenadas aproximadas de la ciudad, no tu identidad).</li>
   </ul>
   <p>No vendemos tus datos personales a terceros.</p>
 
@@ -73,30 +77,16 @@
     <li>Podés borrar tus propios reportes de Comunidad desde "Mis reportes" dentro de la app.</li>
     <li>Podés revocar el permiso de ubicación desde los ajustes de tu sistema operativo en cualquier momento.</li>
     <li>Podés cambiar tu consentimiento de anuncios personalizados desde Ajustes dentro de la app.</li>
-    <li>Podés pedirnos que eliminemos datos asociados a un reporte específico escribiéndonos a agustinnicoliniescuela10@gmail.com o desde https://soporte.meteoquimii.site/.</li>
+    <li><strong>Eliminar tu cuenta y todos tus datos:</strong> desde la app en <em>Cuenta → Eliminar cuenta</em>, o desde <a href="https://soporte.meteoquimii.site/eliminar-cuenta.html">https://soporte.meteoquimii.site/eliminar-cuenta.html</a>. Se borran de forma permanente y sin conservar copia: tu cuenta, perfil, plan, sesiones, tus reportes con sus fotos, tus votos y tu suscripción a alertas de lluvia. No se conserva ningún dato.</li>
   </ul>
 
-  <h2>5. Eliminación de cuenta y datos</h2>
-  <p>MeteoQuimii permite crear una cuenta (autenticación anónima con Firebase) para participar en la Comunidad. Si querés eliminar tu cuenta y todos los datos asociados, podés hacerlo directamente desde la app: cuando estás logueado, aparece el botón <em>"Eliminar cuenta"</em> en <em>Ajustes → Cuenta</em>.</p>
-  <div class="card">
-    <p><strong>Qué se elimina al borrar la cuenta (de forma permanente e irreversible):</strong></p>
-    <ul>
-      <li>Tu cuenta de autenticación (Firebase Auth).</li>
-      <li>Todos los reportes de Comunidad que hayas creado.</li>
-      <li>Las fotos asociadas a esos reportes (almacenadas en Cloudinary).</li>
-      <li>Cualquier dato vinculado a tu identificador de usuario en nuestra base de datos (Firestore).</li>
-    </ul>
-    <p><strong>Qué no se elimina:</strong> no conservamos datos personales residuales asociados a tu cuenta. Los datos de analítica agregada y anónima (Firebase Analytics) y los identificadores publicitarios gestionados por Google AdMob no están vinculados a tu cuenta y se rigen por las políticas de Google descritas en la sección 2.</p>
-  </div>
-  <p>La eliminación es inmediata y no requiere contacto con soporte. Si tenés problemas para eliminar tu cuenta desde la app, podés solicitarlo escribiéndonos a <strong>agustinnicoliniescuela10@gmail.com</strong> o desde el <a href="https://soporte.meteoquimii.site/">portal de soporte</a>.</p>
-
-  <h2>6. Menores de edad</h2>
+  <h2>5. Menores de edad</h2>
   <p>MeteoQuimii no está dirigida a menores de 13 años y no recolectamos deliberadamente datos de niños. No usamos publicidad basada en intereses dirigida a usuarios que sepamos que son menores de 13 años.</p>
 
-  <h2>7. Cambios en esta política</h2>
+  <h2>6. Cambios en esta política</h2>
   <p>Podemos actualizar esta política de vez en cuando. Vamos a reflejar la fecha de la última actualización arriba de esta página.</p>
 
-  <h2>8. Contacto</h2>
+  <h2>7. Contacto</h2>
   <p>Para consultas sobre privacidad, escribinos a <strong>agustinnicoliniescuela10@gmail.com</strong> o visitá nuestro <a href="https://soporte.meteoquimii.site/">portal de soporte</a>.</p>
 
 </div>
