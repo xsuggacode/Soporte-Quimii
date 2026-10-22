@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eliminar cuenta — MeteoQuimii</title>
+<style>
+  :root { --bg:#05080d; --card:#0d141f; --ink:#e8edf5; --muted:#9aa8bd; --primary:#1da1f2; --danger:#e5484d; --border:rgba(232,237,245,0.08); }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font-family:-apple-system,"Segoe UI",Inter,system-ui,sans-serif; line-height:1.65; padding:32px 18px 64px; }
+  .wrap { max-width:560px; margin:0 auto; }
+  h1 { font-size:26px; margin-bottom:6px; }
+  p, li { color:#cdd6e3; font-size:14.5px; }
+  ul { padding-left:20px; } li { margin-bottom:6px; }
+  a { color:var(--primary); }
+  .card { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:20px; margin:20px 0; }
+  label { display:block; font-size:13px; font-weight:600; margin:14px 0 6px; color:var(--muted); }
+  input[type=email], input[type=password] { width:100%; padding:12px 13px; border-radius:10px; border:1px solid rgba(232,237,245,0.18); background:#05080d; color:var(--ink); font-size:15px; }
+  input:focus-visible, button:focus-visible { outline:2px solid var(--primary); outline-offset:1px; }
+  .check { display:flex; gap:10px; align-items:flex-start; margin-top:16px; }
+  .check input { margin-top:4px; }
+  .check span { font-size:14px; color:#cdd6e3; }
+  button { margin-top:18px; width:100%; padding:13px; border:0; border-radius:10px; background:var(--danger); color:#fff; font-size:15px; font-weight:600; cursor:pointer; }
+  button:disabled { opacity:.5; cursor:not-allowed; }
+  #status { margin-top:14px; font-size:14px; min-height:1.2em; }
+  #status.ok { color:#3ecf8e; } #status.err { color:#ff8a8f; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Eliminar mi cuenta de MeteoQuimii</h1>
+  <p>Desde esta página podés eliminar tu cuenta y todos tus datos. También podés hacerlo dentro de la app en <em>Cuenta → Eliminar cuenta</em>.</p>
+
+  <div class="card">
+    <p><strong>Se elimina de forma permanente, sin conservar ninguna copia:</strong></p>
+    <ul>
+      <li>Tu cuenta (correo y contraseña) y tu perfil.</li>
+      <li>Tu plan Premium y las sesiones de tus dispositivos.</li>
+      <li>Todos tus reportes de Comunidad, con sus fotos, y tus votos.</li>
+      <li>Tu suscripción a alertas de lluvia y el token de notificaciones.</li>
+    </ul>
+    <p>Esta acción no se puede deshacer.</p>
+  </div>
+
+  <form id="f" class="card" autocomplete="on">
+    <label for="email">Correo de tu cuenta</label>
+    <input id="email" type="email" required autocomplete="email">
+    <label for="pw">Contraseña</label>
+    <input id="pw" type="password" required autocomplete="current-password">
+    <div class="check">
+      <input id="ok" type="checkbox" required>
+      <span>Entiendo que se eliminarán mi cuenta y todos mis datos de forma permanente.</span>
+    </div>
+    <button id="btn" type="submit">Eliminar mi cuenta definitivamente</button>
+    <div id="status" role="status" aria-live="polite"></div>
+  </form>
+
+  <p><a href="privacy.html">Política de Privacidad</a> · <a href="terms.html">Términos de Uso</a></p>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+
+const app = initializeApp({
+  apiKey: "AIzaSyDTbAhyGCSLivl_69NQyI6mbZ0lIyYHwjM",
+  authDomain: "meteoquimii.firebaseapp.com",
+  projectId: "meteoquimii",
+  appId: "1:341543890837:web:c012d57692e3b004fc909c"
+});
+const auth = getAuth(app);
+const API = "https://quimii-api.quimii-web-app.workers.dev/api/account/delete";
+const $ = (id) => document.getElementById(id);
+const status = (msg, cls) => { $("status").textContent = msg; $("status").className = cls || ""; };
+
+$("f").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const btn = $("btn"); btn.disabled = true; status("Verificando…");
+  try {
+    const cred = await signInWithEmailAndPassword(auth, $("email").value.trim(), $("pw").value);
+    const token = await cred.user.getIdToken(true);
+    status("Eliminando datos…");
+    const r = await fetch(API, { method:"POST", headers:{ "Content-Type":"application/json", "Authorization":"Bearer "+token }, body:"{}" });
+    const j = await r.json().catch(() => ({}));
+    if (!r.ok || !j.ok) throw new Error("delete-failed:" + (j.code || r.status));
+    try { await signOut(auth); } catch {}
+    $("f").reset();
+    status("Tu cuenta y todos tus datos fueron eliminados.", "ok");
+  } catch (err) {
+    const c = String(err && (err.code || err.message) || "");
+    let m = "No se pudo eliminar la cuenta. Intentá de nuevo en unos minutos.";
+    if (/invalid-credential|wrong-password|user-not-found|invalid-email/.test(c)) m = "Correo o contraseña incorrectos.";
+    else if (/too-many-requests/.test(c)) m = "Demasiados intentos. Esperá unos minutos e intentá de nuevo.";
+    else if (/network/.test(c)) m = "Sin conexión. Revisá tu internet.";
+    status(m, "err");
+  } finally { btn.disabled = false; }
+});
+</script>
+</body>
+</html>
